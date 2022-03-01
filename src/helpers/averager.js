@@ -1,37 +1,39 @@
 import { FaMarsStrokeH } from 'react-icons/fa';
 
-export function average(times) {
+export function average(round) {
   return (
     Math.round(
-      ((times.reduce((acc, curr) => acc + curr, 0) -
-        Math.min(...times) -
-        Math.max(...times)) /
-        (times.length - 2)) *
+      ((round.reduce((acc, curr) => acc + curr.time, 0) -
+        Math.min(...round.map(t => t.time)) -
+        Math.max(...round.map(t => t.time))) /
+        (round.length - 2)) *
         100
     ) / 100
   );
 }
 
-export function bpa(times) {
-  if (times.length !== 4) {
+export function bpa(round) {
+  if (round.length !== 4) {
     return null;
   }
   return (
     Math.round(
-      ((times.reduce((acc, curr) => acc + curr, 0) - Math.max(...times)) *
+      ((round.reduce((acc, curr) => acc + curr.time, 0) -
+        Math.max(...round.map(t => t.time))) *
         100) /
         3
     ) / 100
   );
 }
 
-export function wpa(times) {
-  if (times.length !== 4) {
+export function wpa(round) {
+  if (round.length !== 4) {
     return null;
   }
   return (
     Math.round(
-      ((times.reduce((acc, curr) => acc + curr, 0) - Math.min(...times)) *
+      ((round.reduce((acc, curr) => acc + curr.time, 0) -
+        Math.min(...round.map(t => t.time))) *
         100) /
         3
     ) / 100

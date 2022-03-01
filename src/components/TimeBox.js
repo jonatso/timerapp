@@ -9,12 +9,13 @@ import {
   Grid,
   Box,
   Text,
+  Tooltip,
   useColorModeValue,
 } from '@chakra-ui/react';
 
 import { useState, useRef } from 'react';
 
-export default function TimeBox({ times, deleteTime }) {
+export default function TimeBox({ solves, deleteTime }) {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -33,36 +34,43 @@ export default function TimeBox({ times, deleteTime }) {
         minWidth={750}
         minHeight={85}
       >
-        {times.map((time, index) => (
-          <Box
-            key={index}
-            textAlign={'center'}
-            onClick={() => {
-              setSelectedIndex(index);
-              setIsOpen(true);
-            }}
-            bg={'gray.50'}
-            _dark={{ bg: 'gray.900' }}
-            margin={1.5}
-            borderRadius={5}
-            _hover={{
-              background: 'gray.200',
-              cursor: 'pointer',
-            }}
+        {solves.map((solve, index) => (
+          <Tooltip
+            hasArrow
+            label={solve.scramble}
+            placement="top"
+            fontSize="lg"
           >
-            <Text
-              fontSize="5xl"
-              color={
-                time === Math.min(...times)
-                  ? 'green.500'
-                  : time === Math.max(...times)
-                  ? 'red.500'
-                  : 'default'
-              }
+            <Box
+              key={index}
+              textAlign={'center'}
+              onClick={() => {
+                setSelectedIndex(index);
+                setIsOpen(true);
+              }}
+              bg={'gray.50'}
+              _dark={{ bg: 'gray.900' }}
+              margin={1.5}
+              borderRadius={5}
+              _hover={{
+                background: 'gray.200',
+                cursor: 'pointer',
+              }}
             >
-              {time}
-            </Text>
-          </Box>
+              <Text
+                fontSize="5xl"
+                color={
+                  solve.time === Math.min(...solves.map(t => t.time))
+                    ? 'green.500'
+                    : solve.time === Math.max(...solves.map(t => t.time))
+                    ? 'red.500'
+                    : 'default'
+                }
+              >
+                {solve.time}
+              </Text>
+            </Box>
+          </Tooltip>
         ))}
       </Grid>
 
@@ -79,7 +87,7 @@ export default function TimeBox({ times, deleteTime }) {
 
             <AlertDialogBody>
               Are you sure? This will delete the selected time (
-              {times[selectedIndex]}).
+              {solves[selectedIndex] && solves[selectedIndex].time}).
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -87,7 +95,7 @@ export default function TimeBox({ times, deleteTime }) {
                 Cancel
               </Button>
               <Button colorScheme="red" onClick={onCloseDelete} ml={3}>
-                Reset
+                Delete
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

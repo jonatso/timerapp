@@ -28,10 +28,10 @@ export default function TimeSideBar({ rounds }) {
                 {average(round)}
               </Td>
               <Td fontSize="xl" isNumeric>
-                {Math.min(...round)}
+                {Math.min(...round.map(t => t.time))}
               </Td>
               <Td fontSize="xl" isNumeric>
-                {Math.max(...round)}
+                {Math.max(...round.map(t => t.time))}
               </Td>
             </Tr>
           ))}

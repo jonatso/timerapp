@@ -22,21 +22,28 @@ import ResetRound from './ResetRound';
 import TimeBox from './TimeBox';
 import TimeSideBar from './TimeSideBar';
 
-export default function TimesInput({ sendTimes, getNewScramble }) {
-  const [times, setTimes] = useState([]);
+export default function TimesInput({
+  sendSolves,
+  getNewScramble,
+  currentScramble,
+}) {
+  const [solves, setSolves] = useState([]);
   const [inputTime, setInputTime] = useState('');
 
   const handleChange = val => setInputTime(val);
   const addTime = event => {
     event.preventDefault();
-    setTimes([...times, timeParser(inputTime)]);
+    setSolves([
+      ...solves,
+      { time: timeParser(inputTime), scramble: currentScramble },
+    ]);
 
     setInputTime('');
     getNewScramble();
   };
   const newRound = () => {
-    sendTimes(times);
-    setTimes([]);
+    sendSolves(solves);
+    setSolves([]);
   };
 
   return (
@@ -80,16 +87,16 @@ export default function TimesInput({ sendTimes, getNewScramble }) {
             colorScheme="teal"
             mt={3}
             type="submit"
-            isDisabled={times.length === 5 || inputTime === ''}
+            isDisabled={solves.length === 5 || inputTime === ''}
             leftIcon={<FaPlus />}
           >
             Add
           </Button>
           <ResetRound
-            resetRound={() => setTimes([])}
-            isDisabled={times.length === 0}
+            resetRound={() => setSolves([])}
+            isDisabled={solves.length === 0}
           />
-          {times.length === 5 && (
+          {solves.length === 5 && (
             <Button colorScheme="green" mt={3} onClick={newRound}>
               New Round
             </Button>
@@ -98,22 +105,22 @@ export default function TimesInput({ sendTimes, getNewScramble }) {
       </Center>
 
       <TimeBox
-        times={times}
+        solves={solves}
         deleteTime={index => {
-          setTimes(prevTimes => prevTimes.filter((time, i) => i !== index));
+          setSolves(prevSolves => prevSolves.filter((time, i) => i !== index));
         }}
       />
 
       <Center>
         <Text fontSize={'2xl'}>
-          {times.length === 5
-            ? `Ao5: ${average(times)}`
-            : times.length === 4
-            ? `BPA: ${bpa(times)}, WPA: ${wpa(times)}`
+          {solves.length === 5
+            ? `Ao5: ${average(solves)}`
+            : solves.length === 4
+            ? `BPA: ${bpa(solves)}, WPA: ${wpa(solves)}`
             : '-'}
         </Text>
       </Center>
-      {times.length === 5 && <Confetti />}
+      {solves.length === 5 && <Confetti />}
     </Box>
   );
 }
