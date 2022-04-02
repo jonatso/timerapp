@@ -5,12 +5,12 @@ import {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogOverlay,
+  AlertDialogCloseButton,
   Button,
   Grid,
   Box,
   Text,
   Tooltip,
-  useColorModeValue,
 } from '@chakra-ui/react';
 
 import { useState, useRef } from 'react';
@@ -84,6 +84,7 @@ export default function TimeBox({ solves, deleteTime }) {
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
               Delete time
             </AlertDialogHeader>
+            <AlertDialogCloseButton />
 
             <AlertDialogBody>
               Are you sure? This will delete the selected time (
